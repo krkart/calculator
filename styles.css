@@ -1,0 +1,23 @@
+body{
+  height: 100%;
+  width: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  background-color: #fff;
+  background-image: url('img/flowing-numbers.jpg');
+  background-size: 100%;
+  font: 16px/1.5em "Overpass", "Open Sans", Helvetica, sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 70vh;
+  height: 90vh;
+  border: 4px solid black;
+}
