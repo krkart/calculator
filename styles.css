@@ -62,13 +62,17 @@ td {
   flex-wrap: nowrap;
   width: 24%;
   border-radius: 10%;
-  background-color: cyan;
+  background-color: darkcyan;
   margin: 0.5%;
   padding: 5% 0%;
 }
 
+td:hover { 
+  cursor: pointer;
+}
+
 td.operator {
-  background-color: hotpink;
+  background-color: slateblue;
 }
 
 td.clear {
