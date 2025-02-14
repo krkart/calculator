@@ -1,26 +1,20 @@
 var btns = document.querySelectorAll('td');
 btns.forEach(btn => btn.addEventListener('mousedown', (e) => {
   e.target.style.backgroundColor = bgShade(e.target, e.type);
-  console.log(e.target.style.backgroundColor)
 }));
 
 btns.forEach(btn => btn.addEventListener('mouseup', (e) => {
   e.target.style.backgroundColor = bgShade(e.target, e.type);
-  console.log(e.target.style.backgroundColor)
 }));
 
-function bgShade(elem, event) {
-  const shade = window.getComputedStyle(elem)
+function bgShade(el, etype) {
+  const shade = window.getComputedStyle(el)
                       .backgroundColor
                       .match(/\d+/g)
-                      .map(valueStr => { 
-                        if (event == 'mousedown') {
-                          return Math.max(+valueStr + 40, 0)
-                        } else {
-                          return Math.max(+valueStr - 40, 0)
-                        } 
-                      });
+                      .map(valueStr => (etype == 'mousedown')? 
+                                      Math.max(+valueStr + 40, 0):
+                                      Math.max(+valueStr - 40, 0)
+                      );
                                     
   return `rgb(${shade.join()})`;
 }
-                                  
