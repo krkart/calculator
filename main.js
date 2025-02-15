@@ -1,4 +1,4 @@
-var btns = document.querySelectorAll('td');
+let btns = document.querySelectorAll('td');
 btns.forEach(btn => btn.addEventListener('mousedown', (e) => {
   e.target.style.backgroundColor = bgShade(e.target, e.type);
 }));
@@ -6,6 +6,8 @@ btns.forEach(btn => btn.addEventListener('mousedown', (e) => {
 btns.forEach(btn => btn.addEventListener('mouseup', (e) => {
   e.target.style.backgroundColor = bgShade(e.target, e.type);
 }));
+
+btns.forEach(btn => btn.addEventListener('click', display));
 
 function bgShade(el, etype) {
   const shade = window.getComputedStyle(el)
@@ -17,4 +19,10 @@ function bgShade(el, etype) {
                       );
                                     
   return `rgb(${shade.join()})`;
+}
+
+function display(e) {
+  if (e.target.classList.contains('num') {
+    
+  })
 }

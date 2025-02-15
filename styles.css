@@ -35,6 +35,8 @@ body{
   height: 23.5%;
   background-color: ivory;
   border: 0.25rem solid #333;
+  font: 2em monospace;
+  text-align: end;
 }
 
 .buttons {
