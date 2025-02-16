@@ -1,6 +1,7 @@
-let firstNum = 0
+let firstNum = 0;
 let secondNum = 0;
 let operator = '';
+let result = 0;
 let btns = document.querySelectorAll('td');
 let display = document.querySelector('.display');
 
@@ -26,6 +27,22 @@ function bgShade(el, etype) {
   return `rgb(${shade.join()})`;
 }
 
+function add(a, b) {
+  return a + b;
+}
+
+function subtract(a, b) {
+  return a - b
+}
+
+function multiply(a, b) {
+  return a * b
+}
+
+function divide(a, b) {
+  return a / b
+}
+
 function displayContent(e) {
   if (display.textContent == '0' || e.target.classList.contains('negate')) {
     display.textContent = '';
@@ -39,44 +56,24 @@ function displayContent(e) {
     if (firstNum != 0) {
       secondNum = Number(display.textContent);
       console.log(firstNum, secondNum);
+      operator = e.target.id;
+      let calc = window[operator];
+      result = calc(firstNum, secondNum);
+      firstNum = result;
     } else {
       firstNum = Number(display.textContent);
       console.log(firstNum, secondNum);
     }
-    operator = e.target.id;
-    let calc = window[operator];
-    firstNum = calc(firstNum, secondNum);
-    // console.log(e.target.id, typeof (e.target.id));
-    // let calc = window[operator];
-    // console.log(typeof(calc))
-    // calc(firstNum, secondNum);
   }
 
   if (e.target.classList.contains('clear')) {
-    firstNum = secondNum = 0;
+    firstNum = secondNum = result = 0;
     operator = '';
     display.textContent = '0';
   }
-
-  function add(a, b) {
-    return a + b;
-  }
-
-  function subtract(a, b) {
-    return a - b
-  }
-
-  function multiply(a, b) {
-    return a * b
-  }
-
-  function divide(a, b) {
-    return a / b
-  }
-
-  function equal(a, b) {
-   display.textContent = firstNum;
-   console.log(firstNum)
-  }
 }
 
+function equal(a, b) {
+  display.textContent = result;
+  console.log(result);
+}
