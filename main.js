@@ -1,10 +1,17 @@
-let firstNum = 0;
-let secondNum = 0;
+let fn = 0;   // first number
+let ln = 0;   // last number
+let result = 0;
 let operator = null;
 let operatorClicked = false;
 let btns = document.querySelectorAll('td');
 let display = document.querySelector('.display');
 let equal = document.querySelector('.equal');
+let clear = document.querySelector('.clear').addEventListener('click', () => {
+  fn = ln = 0;
+  operator = null;
+  operatorClicked = false;
+  display.textContent = '0';
+});
 
 btns.forEach(btn => btn.addEventListener('mousedown', (e) => {
   e.target.style.backgroundColor = bgShade(e.target, e.type);
@@ -22,7 +29,6 @@ function bgShade(el, etype) {
       Math.max(+valueStr + 40, 0) :
       Math.max(+valueStr - 40, 0)
     );
-
   return `rgb(${shade.join()})`;
 }
 
@@ -47,44 +53,36 @@ function displayContent(e) {
     operatorClicked = true;
     operator = e.target.id;
     equal.id = operator;
-    console.log(equal.id);
-    if (firstNum != 0 && display.textContent !== "") {
-      secondNum = Number(display.textContent);
-      console.log(`before calc: ${firstNum}, ${secondNum}, ${operator}`);
+    if (fn != 0 && display.textContent !== "") {
+      ln = Number(display.textContent);
+      console.log(`before calc: ${fn}, ${ln}, ${operator}`);
       let calc = window[operator];
-      firstNum = calc(firstNum, secondNum);
-      display.append(firstNum);
-      console.log('fn after calc: ' + firstNum);
+      result = calc(fn, ln);
+      display.append(result);
+      console.log('fn after calc: ' + fn);
     } else if (display.textContent !== "") {
-      firstNum = Number(display.textContent);
-      console.log(`before calc: ${firstNum}, ${secondNum}, ${operator}`);
+      fn = Number(display.textContent);
+      console.log(`before calc: ${fn}, ${ln}, ${operator}`);
     }
     display.textContent = "";
-  }
-
-  if (e.target.classList.contains('clear')) {
-    firstNum = secondNum = 0;
-    operator = null;
-    operatorClicked = false;
-    display.textContent = '0';
   }
 }
 
 equal.addEventListener('click', () => {
   if (operator && operatorClicked) {
-    secondNum = Number(display.textContent);
+    ln = Number(display.textContent);
     display.textContent = '';
-    console.log(operator);
     let calc = window[operator];
-    firstNum = calc(firstNum, secondNum);
-    display.append(firstNum);
-    console.log(`after calc: ${firstNum}, ${secondNum}, ${operator}`);
+    result = calc(fn, ln);
+    display.append(result);
+    console.log(`after calc: ${result}, ${ln}, ${operator}`);
     operator = null;
     operatorClicked = false;
-    firstNum = 0;
-    secondNum = 0;
+    fn = 0;
+    ln = 0;
   } else {
     display.textContent = 'ERROR';
-    console.log(`after calc: ${firstNum}, ${secondNum}, ${operator}`);  }
+    console.log(`after calc: ${fn}, ${ln}, ${operator}`);
+  }
 });
 
