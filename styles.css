@@ -74,7 +74,7 @@ td:hover {
   cursor: pointer;
 }
 
-td.operator {
+td.operator, td.negate {
   background-color: slateblue;
 }
 

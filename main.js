@@ -1,88 +1,103 @@
-let fn = 0;   // first number
-let ln = 0;   // last number
-let result = 0;
-let operator = null;
-let operatorClicked = false;
-let btns = document.querySelectorAll('td');
-let display = document.querySelector('.display');
-let equal = document.querySelector('.equal');
-let clear = document.querySelector('.clear').addEventListener('click', () => {
-  fn = ln = 0;
-  operator = null;
-  operatorClicked = false;
-  display.textContent = '0';
-});
+(function () {
+  let fn = 0;   // first number
+  let ln = 0;   // last number
+  let currentOperator = null;
+  let isOperatorClicked = false;
+  const btns = document.querySelectorAll('td');
+  // let clickOperator = document.querySelector('.operator');
+  const display = document.querySelector('.display');
+  const equal = document.querySelector('.equal');
 
-btns.forEach(btn => btn.addEventListener('mousedown', (e) => {
-  e.target.style.backgroundColor = bgShade(e.target, e.type);
-}));
+  window.add = (a, b) => a + b;
+  window.subtract = (a, b) => a - b;
+  window.multiply = (a, b) => a * b;
+  window.divide = (a, b) => a / b;
+  window.percentage = (a, b) => a % b;
+  window.negate = (a, _b) => a * -1;
 
-btns.forEach(btn => btn.addEventListener('mouseup', (e) => {
-  e.target.style.backgroundColor = bgShade(e.target, e.type);
-}));
+  btns.forEach(btn => btn.addEventListener('click', displayContent));
 
-function bgShade(el, etype) {
-  const shade = window.getComputedStyle(el)
-    .backgroundColor
-    .match(/\d+/g)
-    .map(valueStr => (etype == 'mousedown') ?
-      Math.max(+valueStr + 40, 0) :
-      Math.max(+valueStr - 40, 0)
-    );
-  return `rgb(${shade.join()})`;
-}
-
-window.add = (a, b) => a + b;
-window.subtract = (a, b) => a - b;
-window.multiply = (a, b) => a * b;
-window.divide = (a, b) => a / b;
-
-btns.forEach(btn => btn.addEventListener('click', displayContent));
-
-function displayContent(e) {
-  if (display.textContent == '0' || e.target.classList.contains('negate')) {
-    display.textContent = '';
-  }
-
-  if (e.target.classList.contains('num')) {
-    display.append(e.target.textContent);
-  }
-
-  if (e.target.classList.contains('operator')
-    && !(e.target.classList.contains('equal'))) {
-    operatorClicked = true;
-    operator = e.target.id;
-    equal.id = operator;
-    if (fn != 0 && display.textContent !== "") {
-      ln = Number(display.textContent);
-      console.log(`before calc: ${fn}, ${ln}, ${operator}`);
-      let calc = window[operator];
-      result = calc(fn, ln);
-      display.append(result);
-      console.log('fn after calc: ' + fn);
-    } else if (display.textContent !== "") {
-      fn = Number(display.textContent);
-      console.log(`before calc: ${fn}, ${ln}, ${operator}`);
+  function displayContent(e) {
+    if (display.textContent == '0') {
+      display.textContent = '';
     }
-    display.textContent = "";
-  }
-}
 
-equal.addEventListener('click', () => {
-  if (operator && operatorClicked) {
-    ln = Number(display.textContent);
-    display.textContent = '';
-    let calc = window[operator];
-    result = calc(fn, ln);
-    display.append(result);
-    console.log(`after calc: ${result}, ${ln}, ${operator}`);
-    operator = null;
-    operatorClicked = false;
-    fn = 0;
-    ln = 0;
-  } else {
-    display.textContent = 'ERROR';
-    console.log(`after calc: ${fn}, ${ln}, ${operator}`);
-  }
-});
+    if (e.target.classList.contains('num')) {
+      display.append(e.target.textContent);
+    }
 
+    if (e.target.classList.contains('operator')
+      && !(e.target.classList.contains('equal'))) {
+      isOperatorClicked = true;
+      const clickedOperator = e.target.id;
+      equal.id = currentOperator;
+      if (currentOperator && isOperatorClicked && display.textContent !== "") {
+        ln = Number(display.textContent);
+        console.log(`calc: ${fn} ${currentOperator} by ${ln}`);
+        let calc = window[currentOperator];
+        fn = calc(fn, ln);
+        display.textContent = fn;
+        console.log('result: ' + fn);
+        currentOperator = clickedOperator;
+        isOperatorClicked = true;
+      } else if (display.textContent !== "") {
+        fn = Number(display.textContent);
+        currentOperator = clickedOperator;
+      }
+      display.textContent = "";
+    }
+  }
+
+  /*
+  if (e.target.classList.contains('negate')) {
+    fn = Number(display.textContent);
+    fn = calc(fn, ln);
+    display.textContent = fn;
+    console.log('result: ' + fn);
+  } */
+
+  equal.addEventListener('click', () => {
+    if (currentOperator && isOperatorClicked) {
+      ln = Number(display.textContent);
+      display.textContent = '';
+      let calc = window[currentOperator];
+      fn = calc(fn, ln);
+      display.append(fn);
+      console.log(`equals: ${fn} ${currentOperator} by ${ln}`);
+      currentOperator = null;
+      isOperatorClicked = false;
+      fn = 0;
+      ln = 0;
+    } else {
+      display.textContent = 'ERROR';
+      console.log(`equals?: ${fn}, ${ln}, ${currentOperator}`);
+    }
+  });
+
+  document.querySelector('.clear').addEventListener('click', () => {
+    fn = ln = 0;
+    currentOperator = null;
+    clickedOperator = null;
+    isOperatorClicked = false;
+    display.textContent = '0';
+  });
+
+  btns.forEach(btn => btn.addEventListener('mousedown', (e) => {
+    e.target.style.backgroundColor = bgShade(e.target, e.type);
+  }));
+
+  btns.forEach(btn => btn.addEventListener('mouseup', (e) => {
+    e.target.style.backgroundColor = bgShade(e.target, e.type);
+  }));
+
+  function bgShade(el, etype) {
+    const shade = window.getComputedStyle(el)
+      .backgroundColor
+      .match(/\d+/g)
+      .map(valueStr => (etype == 'mousedown') ?
+        Math.max(+valueStr + 40, 0) :
+        Math.max(+valueStr - 40, 0)
+      );
+    return `rgb(${shade.join()})`;
+  }
+})();
