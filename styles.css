@@ -42,6 +42,8 @@
   border: 0.25rem solid #333;
   padding: 0.25rem;
   text-align: end;
+  text-wrap: wrap;
+  overflow: hidden;
   font-size: 2.4em;
   font-family: 'digital-clock';
 }
