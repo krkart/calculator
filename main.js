@@ -31,7 +31,7 @@
       isOperatorClicked = true;
       const clickedOperator = e.target.id;
       equal.id = currentOperator;
-      if (currentOperator && isOperatorClicked && display.textContent !== "") {
+      if (currentOperator && isOperatorClicked && display.textContent !== '') {
         ln = Number(display.textContent);
         console.log(`calc: ${fn} ${currentOperator} by ${ln}`);
         let calc = window[currentOperator];
@@ -40,21 +40,26 @@
         console.log('result: ' + fn);
         currentOperator = clickedOperator;
         isOperatorClicked = true;
-      } else if (display.textContent !== "") {
+      } else if (display.textContent !== '') {
         fn = Number(display.textContent);
         currentOperator = clickedOperator;
       }
-      display.textContent = "";
+      display.textContent = '';
+    }
+
+    if (e.target.classList.contains('negate')) {
+      if (fn !== 0) {
+        ln = Number(display.textContent);
+        ln = negate(ln, fn);
+        display.textContent = ln;
+      } else {
+        fn = Number(display.textContent);
+        fn = negate(fn, ln);
+        display.textContent = fn;
+      }
+      console.log('result: ' + fn);
     }
   }
-
-  /*
-  if (e.target.classList.contains('negate')) {
-    fn = Number(display.textContent);
-    fn = calc(fn, ln);
-    display.textContent = fn;
-    console.log('result: ' + fn);
-  } */
 
   equal.addEventListener('click', () => {
     if (currentOperator && isOperatorClicked) {
