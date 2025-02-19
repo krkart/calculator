@@ -1,9 +1,10 @@
 let firstNum = 0;
 let secondNum = 0;
-let operator = '';
-let result = 0;
+let operator = null;
+let operatorClicked = false;
 let btns = document.querySelectorAll('td');
 let display = document.querySelector('.display');
+let equal = document.querySelector('.equal');
 
 btns.forEach(btn => btn.addEventListener('mousedown', (e) => {
   e.target.style.backgroundColor = bgShade(e.target, e.type);
@@ -12,8 +13,6 @@ btns.forEach(btn => btn.addEventListener('mousedown', (e) => {
 btns.forEach(btn => btn.addEventListener('mouseup', (e) => {
   e.target.style.backgroundColor = bgShade(e.target, e.type);
 }));
-
-btns.forEach(btn => btn.addEventListener('click', displayContent));
 
 function bgShade(el, etype) {
   const shade = window.getComputedStyle(el)
@@ -27,21 +26,12 @@ function bgShade(el, etype) {
   return `rgb(${shade.join()})`;
 }
 
-function add(a, b) {
-  return a + b;
-}
+window.add = (a, b) => a + b;
+window.subtract = (a, b) => a - b;
+window.multiply = (a, b) => a * b;
+window.divide = (a, b) => a / b;
 
-function subtract(a, b) {
-  return a - b
-}
-
-function multiply(a, b) {
-  return a * b
-}
-
-function divide(a, b) {
-  return a / b
-}
+btns.forEach(btn => btn.addEventListener('click', displayContent));
 
 function displayContent(e) {
   if (display.textContent == '0' || e.target.classList.contains('negate')) {
@@ -52,28 +42,49 @@ function displayContent(e) {
     display.append(e.target.textContent);
   }
 
-  if (e.target.classList.contains('operator')) {
-    if (firstNum != 0) {
+  if (e.target.classList.contains('operator')
+    && !(e.target.classList.contains('equal'))) {
+    operatorClicked = true;
+    operator = e.target.id;
+    equal.id = operator;
+    console.log(equal.id);
+    if (firstNum != 0 && display.textContent !== "") {
       secondNum = Number(display.textContent);
-      console.log(firstNum, secondNum);
-      operator = e.target.id;
+      console.log(`before calc: ${firstNum}, ${secondNum}, ${operator}`);
       let calc = window[operator];
-      result = calc(firstNum, secondNum);
-      firstNum = result;
-    } else {
+      firstNum = calc(firstNum, secondNum);
+      display.append(firstNum);
+      console.log('fn after calc: ' + firstNum);
+    } else if (display.textContent !== "") {
       firstNum = Number(display.textContent);
-      console.log(firstNum, secondNum);
+      console.log(`before calc: ${firstNum}, ${secondNum}, ${operator}`);
     }
+    display.textContent = "";
   }
 
   if (e.target.classList.contains('clear')) {
-    firstNum = secondNum = result = 0;
-    operator = '';
+    firstNum = secondNum = 0;
+    operator = null;
+    operatorClicked = false;
     display.textContent = '0';
   }
 }
 
-function equal(a, b) {
-  display.textContent = result;
-  console.log(result);
-}
+equal.addEventListener('click', () => {
+  if (operator && operatorClicked) {
+    secondNum = Number(display.textContent);
+    display.textContent = '';
+    console.log(operator);
+    let calc = window[operator];
+    firstNum = calc(firstNum, secondNum);
+    display.append(firstNum);
+    console.log(`after calc: ${firstNum}, ${secondNum}, ${operator}`);
+    operator = null;
+    operatorClicked = false;
+    firstNum = 0;
+    secondNum = 0;
+  } else {
+    display.textContent = 'ERROR';
+    console.log(`after calc: ${firstNum}, ${secondNum}, ${operator}`);  }
+});
+
